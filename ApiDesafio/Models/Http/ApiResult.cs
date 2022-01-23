@@ -4,14 +4,14 @@
         public object? Data { get; set; }
         public bool Error { get; set; }
 
-        public ApiResult SuccessResult (object? data) {
+        protected ApiResult SuccessResult (object? data) {
             StatusCode = 200; 
             Data = data; 
             Error = false;
             return this;
         }
 
-        public ApiResult BadResult(int status, object? errors) {
+        protected ApiResult BadResult(int status, object? errors) {
             StatusCode = status;
             Data = errors;
             Error = true;

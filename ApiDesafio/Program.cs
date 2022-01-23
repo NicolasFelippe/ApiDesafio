@@ -1,8 +1,18 @@
-using ApiDesafio.Controllers;
+using ApiDesafio.Services;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
-var app = builder.Build();
+builder.Services.TryAddSingleton<IWordService, WordService>();
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+builder.Services.AddControllers();
 
-app.MapGet("/{wordOne}/{wordTwo}", new WordController().IsPrimeWord);
+var app = builder.Build();
+if (builder.Environment.IsDevelopment()) {
+    app.UseDeveloperExceptionPage();
+}
+app.UseSwagger();
+app.MapControllers();
+app.UseSwaggerUI();
 
 app.Run();

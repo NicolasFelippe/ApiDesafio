@@ -2,19 +2,24 @@
 using Microsoft.AspNetCore.Mvc;
 
 namespace ApiDesafio.Controllers {
+    [ApiController]
     public abstract class BaseController : ApiResult {
 
         private readonly ICollection<string> _errors = new List<string>();
 
-        protected ApiResult CustomResponse(object? result = null) {
+        protected ApiResult CustomResponse(object? result = null, int errorStatus = 400) {
             if (IsOperationValid()) {
                 return SuccessResult(result);
             }
 
-            return BadResult(400 ,new ValidationProblemDetails(new Dictionary<string, string[]>
+            return BadResult(errorStatus, new ValidationProblemDetails(new Dictionary<string, string[]>
             {
                 { "Messages", _errors.ToArray() }
             }));
+        }
+
+        protected ApiResult CustomResponse(int errorStatus = 400) {
+            return CustomResponse(null, errorStatus);
         }
 
         protected bool IsOperationValid() {
